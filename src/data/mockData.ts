@@ -35,8 +35,8 @@ export const customerCategories = ["All", "Renewal", "Non-Renewal"];
 
 // --- Mock Users ---
 export const mockUsers: User[] = [
-  { email: "admin@ntc.net.np", name: "Rajesh Sharma", role: "Admin" },
-  { email: "analyst@ntc.net.np", name: "Sita Gurung", role: "Analyst" },
+  { email: "admin@ntc.net.np", name: "Saroj Shrestha", role: "Admin" },
+  { email: "analyst@ntc.net.np", name: "Anupam Aryal", role: "Analyst" },
 ];
 
 // --- KPI Data ---
