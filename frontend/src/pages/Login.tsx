@@ -5,25 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Role } from "@/data/mockData";
 import { Lock, Mail } from "lucide-react";
 
 export default function Login() {
   const [email, setEmail] = useState("admin@ntc.net.np");
-  const [password, setPassword] = useState("password");
-  const [role, setRole] = useState<Role>("Admin");
+  const [password, setPassword] = useState("admin123");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
@@ -32,11 +24,14 @@ export default function Login() {
       return;
     }
 
-    const success = login(email, password, role);
+    setLoading(true);
+    const success = await login(email, password);
+    setLoading(false);
+
     if (success) {
       navigate("/");
     } else {
-      setError("Login failed. Please try again.");
+      setError("Invalid email or password.");
     }
   };
 
@@ -45,9 +40,11 @@ export default function Login() {
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="text-center space-y-3">
           {/* NTC Branding */}
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-xl bg-primary text-primary-foreground font-black text-xl shadow-lg">
-            NTC
-          </div>
+          <img
+            src="/ntcnobglogo.png"
+            alt="NTC Logo"
+            className="mx-auto h-16 w-16 rounded-xl object-contain bg-white p-1 shadow-lg"
+          />
           <CardTitle className="text-2xl">Nepal Telecom</CardTitle>
           <CardDescription>Business Analytics Dashboard</CardDescription>
         </CardHeader>
@@ -83,29 +80,16 @@ export default function Login() {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label>Role</Label>
-              <Select value={role} onValueChange={(v) => setRole(v as Role)}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="bg-popover">
-                  <SelectItem value="Admin">Admin</SelectItem>
-                  <SelectItem value="Analyst">Analyst</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
             {error && (
               <p className="text-sm text-destructive text-center">{error}</p>
             )}
 
-            <Button type="submit" className="w-full" size="lg">
-              Sign In
+            <Button type="submit" className="w-full" size="lg" disabled={loading}>
+              {loading ? "Signing in..." : "Sign In"}
             </Button>
 
             <p className="text-center text-xs text-muted-foreground">
-              Demo: use any email with Admin or Analyst role
+              Admin: admin@ntc.net.np / admin123 &bull; Analyst: analyst@ntc.net.np / analyst123
             </p>
           </form>
         </CardContent>

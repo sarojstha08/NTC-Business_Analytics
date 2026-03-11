@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -6,8 +5,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { regions, services, timePeriods, customerCategories } from "@/data/mockData";
-import { Filter } from "lucide-react";
+
+// ============================================================
+// Filter options matching backend database values
+// No "Apply" button — selections trigger immediate data refresh
+// ============================================================
+const regions = ["All", "NT Kirtipur", "NT Balambu", "NT Dhading"];
+const services = ["All", "Data", "Voice Pack", "IPTV", "New Connection"];
+const timePeriods = ["Monthly", "Quarterly", "Yearly", "6 Months"];
+const customerCategories = ["All", "Renewal Customer", "Non Renewal Customer"];
 
 export interface Filters {
   region: string;
@@ -19,10 +25,9 @@ export interface Filters {
 interface FilterBarProps {
   filters: Filters;
   onChange: (filters: Filters) => void;
-  onApply: () => void;
 }
 
-export function FilterBar({ filters, onChange, onApply }: FilterBarProps) {
+export function FilterBar({ filters, onChange }: FilterBarProps) {
   const update = (key: keyof Filters, value: string) => {
     onChange({ ...filters, [key]: value });
   };
@@ -65,9 +70,6 @@ export function FilterBar({ filters, onChange, onApply }: FilterBarProps) {
           </SelectContent>
         </Select>
       </div>
-      <Button onClick={onApply} className="gap-2">
-        <Filter className="h-4 w-4" /> Apply Filter
-      </Button>
     </div>
   );
 }

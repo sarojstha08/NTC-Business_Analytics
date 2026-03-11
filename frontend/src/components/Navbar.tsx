@@ -29,11 +29,13 @@ export function Navbar() {
   return (
     <nav className="sticky top-0 z-50 border-b bg-primary text-primary-foreground shadow-md">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
-        {/* Logo */}
+        {/* Logo — real NTC image */}
         <Link to="/" className="flex items-center gap-2 font-bold text-lg tracking-wide">
-          <div className="flex h-8 w-8 items-center justify-center rounded bg-primary-foreground text-primary font-black text-sm">
-            NTC
-          </div>
+          <img
+            src="/ntcnobglogo.png"
+            alt="NTC Logo"
+            className="h-10 w-10 rounded-md object-contain bg-white p-0.5"
+          />
           <span className="hidden sm:inline">Nepal Telecom</span>
         </Link>
 
@@ -57,7 +59,7 @@ export function Navbar() {
               <Button variant="ghost" className="gap-2 text-primary-foreground hover:bg-primary-foreground/10">
                 <User className="h-4 w-4" />
                 <span className="text-sm">{user?.name}</span>
-                <span className="rounded bg-primary-foreground/20 px-1.5 py-0.5 text-xs">{user?.role}</span>
+                <span className="rounded bg-primary-foreground/20 px-1.5 py-0.5 text-xs">{user?.role === "ADMIN" ? "Admin" : "Analyst"}</span>
                 <ChevronDown className="h-3 w-3" />
               </Button>
             </DropdownMenuTrigger>

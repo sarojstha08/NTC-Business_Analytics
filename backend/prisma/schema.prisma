@@ -1,0 +1,86 @@
+// ============================================================
+// Prisma Schema — NTC Insight Hub Database
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// --- Enums ---
+enum Role {
+  ADMIN
+  ANALYST
+}
+
+// --- Models ---
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(ANALYST)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("users")
+}
+
+model Region {
+  id         Int              @id @default(autoincrement())
+  regionName String           @unique @map("region_name")
+  fapData    FapControlData[]
+
+  @@map("regions")
+}
+
+model Service {
+  id          Int              @id @default(autoincrement())
+  serviceName String           @unique @map("service_name")
+  fapData     FapControlData[]
+
+  @@map("services")
+}
+
+model TimePeriod {
+  id         Int              @id @default(autoincrement())
+  periodName String           @unique @map("period_name")
+  fapData    FapControlData[]
+
+  @@map("time_periods")
+}
+
+model CustomerCategory {
+  id           Int              @id @default(autoincrement())
+  categoryName String           @unique @map("category_name")
+  fapData      FapControlData[]
+
+  @@map("customer_categories")
+}
+
+model FapControlData {
+  id                  Int      @id @default(autoincrement())
+  regionId            Int      @map("region_id")
+  serviceId           Int      @map("service_id")
+  timePeriodId        Int      @map("time_period_id")
+  categoryId          Int      @map("category_id")
+  activeUsers         Int      @map("active_users")
+  nonRenewalUsers     Int      @map("non_renewal_users")
+  revenue             Float
+  occupancyPercentage Float    @map("occupancy_percentage")
+  dataUsage           Float    @map("data_usage")
+  callVolume          Int      @map("call_volume")
+  peakUsageTime       String   @map("peak_usage_time")
+  createdAt           DateTime @default(now()) @map("created_at")
+
+  region   Region           @relation(fields: [regionId], references: [id])
+  service  Service          @relation(fields: [serviceId], references: [id])
+  period   TimePeriod       @relation(fields: [timePeriodId], references: [id])
+  category CustomerCategory @relation(fields: [categoryId], references: [id])
+
+  @@map("fap_control_data")
+}
